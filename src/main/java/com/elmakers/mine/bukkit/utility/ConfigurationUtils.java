@@ -18,6 +18,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.util.Vector;
 
+import com.elmakers.mine.bukkit.api.action.CastContext;
 import com.elmakers.mine.bukkit.block.MaterialAndData;
 
 public class ConfigurationUtils {
@@ -86,7 +87,22 @@ public class ConfigurationUtils {
 
         return toMaterialAndData(stringData);
     }
-
+    
+    //This is particularly used for ArmorStandProjectile and anything else that might want to sample the targted block
+    public static MaterialAndData getMaterialAndData(CastContext context, ConfigurationSection node, String path) {
+        String stringData = node.getString(path);
+        
+        if (stringData == "sampleTarget") {
+            if (context.getTargetBlock() != null) {
+                stringData = context.getTargetBlock().toString();
+            } else {
+                return null;
+            }
+        }
+        
+        return toMaterialAndData(stringData);
+    }
+    
     public static Material getMaterial(ConfigurationSection node, String path) {
         return getMaterial(node, path, null);
     }
